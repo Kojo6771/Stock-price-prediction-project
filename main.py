@@ -10,3 +10,16 @@ from datetime import datetime
 
 import warnings
 warnings.filterwarnings("ignore")
+
+#Loading the dataset
+data =pd.read_csv('all_stocks_5yr.csv', delimiter=',', on_bad_lines='skip')
+print(data.shape)
+print(data.sample(7))
+
+#Exploring the dataset
+data.info()
+
+data['date'] = pd.to_datetime(data['date'])
+data.info()
+
+
