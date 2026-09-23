@@ -22,4 +22,7 @@ data.info()
 data['date'] = pd.to_datetime(data['date'])
 data.info()
 
+#Filtering the dataset for selected companies
+companies = ['AAPL', 'AMD', 'FB', 'GOOGL', 'AMZN', 'NVDA', 'EBAY', 'CSCO', 'IBM']
+
 
