@@ -83,6 +83,7 @@ train_data = scaled_data[0:int(training), :]
 x_train = []
 y_train = []
 
+#Creating the training features and labels
 for i in range(60, len(train_data)):
     x_train.append(train_data[i-60:i, 0])
     y_train.append(train_data[i, 0])
@@ -107,4 +108,35 @@ model.summary()
 model.compile(optimizer='adam', loss='mean_squared_error')
 history = model.fit(x_train, y_train, epochs=10)
 
+#Preparing the test dataset and making predictions
+test_data = scaled_data[training - 60:, :]
+x_test = []
+y_test = dataset[training:, :]
+for i in range(60, len(test_data)):
+    x_test.append(test_data[i-60:i, 0])
 
+x_test = np.array(x_test)
+x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))
+
+predictions = model.predict(x_test)
+predictions = scaler.inverse_transform(predictions)
+
+mse = np.mean(((predictions - y_test) ** 2))
+rmse = np.sqrt(mse)
+
+print("MSE", mse)
+print("RMSE", np.sqrt(mse))
+
+#Visualizing the predictions against the actual stock prices
+train = apple[:training]
+test = apple[training:]
+test['Predictions'] = predictions
+
+plt.figure(figsize=(10, 8))
+plt.plot(train['date'], train['close'])
+plt.plot(test['date'], test[['close', 'Predictions']])
+plt.title('Apple Stock Close Price')
+plt.xlabel('Date')
+plt.ylabel("Close")
+plt.legend(['Train', 'Test', 'Predictions'])
+plt.show()
